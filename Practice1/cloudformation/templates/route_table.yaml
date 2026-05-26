@@ -1,0 +1,86 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Route Table
+
+Parameters:
+  VpcId: 
+    Type: String
+  
+  PublicSubnetID:
+    Type: String
+
+  PrivateSubnetID:
+    Type: String
+    
+  IGW:
+    Type: String
+
+  NATGW: 
+    Type: String
+    
+Resources: 
+  # Public Route Table
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      VpcId:
+        Ref: VPC
+      Tags:
+        - Key: Name
+          Value:
+            Fn::Sub: "${ProjectName}-public-rt"
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      RouteTableId: 
+        Ref: PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: 
+        Ref: InternetGateway
+
+  PublicSubnetRTAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      RouteTableId: 
+        Ref: PublicRouteTable
+      SubnetId: 
+        Ref: PublicSubnet
+
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      VpcId: 
+        Ref: VPC
+      Tags:
+        - Key: Name
+          Value:
+            Fn::Sub: "${ProjectName}-private-rt"
+        
+  PrivateRoute:
+    Type: AWS::EC2::Route
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      RouteTableId: 
+        Ref: PrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: 
+        Ref: NatGateway
+
+  PrivateSubnetAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      RouteTableId: 
+        Ref: PrivateRouteTable
+      SubnetId: 
+        Ref: PrivateSubnet
