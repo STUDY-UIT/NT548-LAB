@@ -53,3 +53,39 @@ Resources:
         Ref: VPC
       InternetGatewayId:
         Ref: InternetGateway
+
+  # Public Subnet
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      VpcId: 
+        Ref: VPC
+      CidrBlock:
+        Ref: PublicSubnetCidr
+      AvailabilityZone:
+        Ref: AvailabilityZone
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: 
+            Fn::Sub: "${ProjectName}-public-subnet"
+
+  # Private Subnet:
+  PrivateSubnet:
+    Type: AWS::EC2::Subnet
+    DeletionPolicy: Delete 
+    UpdateReplacePolicy: Delete
+    Properties:
+      VpcId: 
+        Ref: VPC
+      CidrBlock: 
+        Ref: PrivateSubnetCidr
+      AvailabilityZone:
+        Ref: AvailabilityZone
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: name
+          Value:
+            Fn::Sub: "${ProjectName}-private-subnet"
