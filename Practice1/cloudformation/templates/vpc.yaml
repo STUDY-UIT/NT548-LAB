@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: VPC + Subnet(Private + Public)
+
+Parameters:
+  ProjectName:
+    Type: String
+  VpcCidr:
+    Type: String
+    Default: 10.0.0.0/16
+  PublicSubnetCidr:
+    Type: String
+    Default: 10.0.1.0/24
+  PrivateSubnetCidr:
+    Type: String
+    Default: 10.0.2.0/24
+  AvailabilityZone:
+    Type: String
+    Default: ap-southeast-1a
+
+Resources:
+  # VPC
+  VPC:
+    Type: AWS::EC2::VPC
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      CidrBlock:
+        Ref: VpcCidr
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value:
+            Fn::Sub: "${ProjectName}-vpc"
+
+  # Internet Gateway
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      Tags:
+        - Key: Name
+          Value:
+            Fn::Sub: "${ProjectName}-igw"
+
+  IGWAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      VpcId: 
+        Ref: VPC
+      InternetGatewayId:
+        Ref: InternetGateway
