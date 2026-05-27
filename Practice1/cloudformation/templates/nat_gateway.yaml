@@ -6,12 +6,10 @@ Parameters:
     Type: String
   ProjectName:
     Type: String
-  IGWAttachment:
-    Type: String
-  
     
 Resources:
-  NATEIP:
+
+  NatEip:
     Type: AWS::EC2::EIP
     DeletionPolicy: Delete
     UpdateReplacePolicy: Delete
@@ -30,7 +28,7 @@ Resources:
     Properties:
       AllocationId:
         Fn::GetAtt:
-          - NATEIP
+          - NatEip
           - AllocationId
       SubnetId:
         Ref: PublicSubnet
@@ -38,5 +36,12 @@ Resources:
         - Key: Name
           Value:
             Fn::Sub: "${ProjectName}-nat-gw"
+
+Outputs:
+
+  NatGatewayId:
+    Description: NAT Gateway ID
+    Value:
+      Ref: NatGateway
 
 
