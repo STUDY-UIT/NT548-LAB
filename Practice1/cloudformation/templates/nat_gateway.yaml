@@ -2,8 +2,10 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: NAT Gateway
 
 Parameters:
+
   PublicSubnet:
     Type: String
+    
   ProjectName:
     Type: String
     
