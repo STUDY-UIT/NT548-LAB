@@ -2,20 +2,26 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: VPC + Public/Private Subnets
 
 Parameters:
+
   ProjectName:
     Type: String
+
   VpcCidr:
     Type: String
     Default: 10.0.0.0/16
+
   PublicSubnetCidr:
     Type: String
     Default: 10.0.1.0/24
+
   PrivateSubnetCidr:
     Type: String
     Default: 10.0.2.0/24
+
   AvailabilityZone:
     Type: String
     Default: ap-southeast-1a
+
 
 Resources:
   # VPC
@@ -30,7 +36,7 @@ Resources:
       EnableDnsSupport: true
       Tags:
         - Key: Name
-          Value:
+          Value:  # or Value: !Sub "${ProjectName}-vpc"
             Fn::Sub: "${ProjectName}-vpc"
 
   # Internet Gateway
@@ -91,18 +97,23 @@ Resources:
             Fn::Sub: "${ProjectName}-private-subnet"
 
 Outputs:
+
   VpcId: 
+    Description: VPC ID
     Value: 
       Ref: VPC
 
   InternetGatewayId:
+    Description: Internet Gateway ID
     Value:
       Ref: InternetGateway
 
   PublicSubnetId:
+    Description: Public Subnet ID
     Value: 
       Ref: PublicSubnet
       
   PrivateSubnetId:
+    Description: Private Subnet ID
     Value:
       Ref: PrivateSubnet
