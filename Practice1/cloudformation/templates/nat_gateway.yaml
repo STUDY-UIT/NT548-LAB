@@ -1,18 +1,23 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: NAT Gateway
 
-# Parameters:
-#   PublicSubnetID:
-#     Type: String
+Parameters:
+  PublicSubnet:
+    Type: String
+  ProjectName:
+    Type: String
+  IGWAttachment:
+    Type: String
+  
     
 Resources:
   NATEIP:
     Type: AWS::EC2::EIP
     DeletionPolicy: Delete
     UpdateReplacePolicy: Delete
-    DependsOn: IGWAttachment
+    # DependsOn: IGWAttachment
     Properties:
-      Doamin: VPC
+      Domain: VPC
       Tags:
         - Key: Name
           Value: 

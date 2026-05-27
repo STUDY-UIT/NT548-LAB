@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: VPC + Subnet(Private + Public)
+Description: VPC + Public/Private Subnets
 
 Parameters:
   ProjectName:
@@ -89,3 +89,20 @@ Resources:
         - Key: name
           Value:
             Fn::Sub: "${ProjectName}-private-subnet"
+
+Outputs:
+  VpcId: 
+    Value: 
+      Ref: VPC
+
+  InternetGatewayId:
+    Value:
+      Ref: InternetGateway
+
+  PublicSubnetId:
+    Value: 
+      Ref: PublicSubnet
+      
+  PrivateSubnetId:
+    Value:
+      Ref: PrivateSubnet

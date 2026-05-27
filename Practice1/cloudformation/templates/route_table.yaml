@@ -2,6 +2,9 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Route Table
 
 Parameters:
+  ProjectName:
+    Type: String
+    
   VpcId: 
     Type: String
   
