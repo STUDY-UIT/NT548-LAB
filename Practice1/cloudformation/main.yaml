@@ -25,7 +25,7 @@ Parameters:
 
   MyIp:
     Type: String
-    Description: Your public IP address (example 113.161.xx.xx/32) https://whatsmyip.com/
+    Description: Your public IP address (without /32) https://whatsmyip.com/
 
   AmiId:
     Type: AWS::EC2::Image::Id

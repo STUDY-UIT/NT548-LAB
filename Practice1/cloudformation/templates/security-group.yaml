@@ -2,22 +2,26 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Security Group module - Public and Private EC2 Security Groups
 
 Parameters:
+
   ProjectName:
     Type: String
+
   VpcId:
     Type: AWS::EC2::VPC::Id
+
   MyIp:
     Type: String
     Description: Your public IP address (without /32)
 
 Resources:
+
   PublicEC2SG:
     Type: AWS::EC2::SecurityGroup
     DeletionPolicy: Delete
     UpdateReplacePolicy: Delete
     Properties:
-      GroupName:
-        Fn::Sub: "${ProjectName}-public-sg"
+      # GroupName:
+      #   Fn::Sub: "${ProjectName}-public-sg"
       GroupDescription: Allow SSH only from admin IP
       VpcId:
         Ref: VpcId
@@ -41,8 +45,8 @@ Resources:
     DeletionPolicy: Delete
     UpdateReplacePolicy: Delete
     Properties:
-      GroupName:
-        Fn::Sub: "${ProjectName}-private-sg"
+      # GroupName:
+      #   Fn::Sub: "${ProjectName}-private-sg"
       GroupDescription: Allow SSH only from Public EC2 Security Group
       VpcId:
         Ref: VpcId
@@ -62,9 +66,13 @@ Resources:
             Fn::Sub: "${ProjectName}-private-sg"
 
 Outputs:
+
   PublicSGId:
+    Description: Public Security Group ID
     Value:
       Ref: PublicEC2SG
+
   PrivateSGId:
+    Description: Private Security Group ID
     Value:
       Ref: PrivateEC2SG
