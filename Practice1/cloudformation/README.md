@@ -132,4 +132,3 @@ ssh -i mykey.pem ec2-user@10.0.2.xxx
 Nếu SSH thành công:
 |Public EC2 → Private EC2|
 
-

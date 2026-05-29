@@ -1,13 +1,27 @@
-module "network" {
-  source = "./modules/network"
+module "vpc" {
+  source = "./modules/vpc"
 
   project_name        = var.project_name
   vpc_cidr            = var.vpc_cidr
   public_subnet_cidr  = var.public_subnet_cidr
   private_subnet_cidr = var.private_subnet_cidr
-  az                  = var.az
+  az                  = var.az  
 }
 
+module "nat_gateway" {
+  source = "./modules/nat_gateway"
+
+  project_name        = var.project_name
+  public_subnet_id = module.vpc.public_subnet_id
+}
+
+module "route_table" {
+  source = "./modules/route_table"
+
+  project_name        = var.project_name
+  aws_igw_id = module.vpc.aws_igw_id
+  nat_gateway_id = module.nat_gateway.nat_gateway_id
+}
 module "security_group" {
   source = "./modules/security_group"
 
