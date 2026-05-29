@@ -38,6 +38,18 @@ Resources:
         - Key: Name
           Value:  # or Value: !Sub "${ProjectName}-vpc"
             Fn::Sub: "${ProjectName}-vpc"
+            
+  # Default Security Group
+  DefaultSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Default security group for VPC
+      VpcId: 
+        Ref: VPC
+      Tags:
+        - Key: Name
+          Value: 
+            Fn::Sub: "${ProjectName}-default-sg"
 
   # Internet Gateway
   InternetGateway:
