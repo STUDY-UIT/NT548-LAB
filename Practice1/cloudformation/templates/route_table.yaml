@@ -56,6 +56,7 @@ Resources:
       SubnetId: 
         Ref: PublicSubnetID
 
+  # Private Route Table
   PrivateRouteTable:
     Type: AWS::EC2::RouteTable
     DeletionPolicy: Delete

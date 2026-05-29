@@ -14,7 +14,7 @@ Parameters:
     Description: Your public IP address (without /32)
 
 Resources:
-
+  # Public EC2 Security Group
   PublicEC2SG:
     Type: AWS::EC2::SecurityGroup
     DeletionPolicy: Delete
@@ -40,6 +40,7 @@ Resources:
           Value:
             Fn::Sub: "${ProjectName}-public-sg"
 
+  # Private EC2 Security Group
   PrivateEC2SG:
     Type: AWS::EC2::SecurityGroup
     DeletionPolicy: Delete

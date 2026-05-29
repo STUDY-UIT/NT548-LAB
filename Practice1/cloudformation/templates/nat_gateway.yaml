@@ -10,7 +10,7 @@ Parameters:
     Type: String
     
 Resources:
-
+  # NAT Gateway
   NatEip:
     Type: AWS::EC2::EIP
     DeletionPolicy: Delete
