@@ -29,7 +29,7 @@ Parameters:
 
   AmiId:
     Type: AWS::EC2::Image::Id
-    Default: ami-0df7a207adb9748c7
+    Default: ami-0543dbdaf4e114be7
 # or
   # AmiId:
   #   Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
@@ -37,7 +37,7 @@ Parameters:
 
   InstanceType:
     Type: String
-    Default: t2.micro
+    Default: t3.micro
     AllowedValues:
       - t2.micro
       - t2.small
@@ -52,13 +52,13 @@ Parameters:
     Description: "S3 URL chua templates, Example: https://mybucket.s3.ap-southeast-1.amazonaws.com"
 
 Resources:
-  NetworkStack:
+  VpcStack:
     Type: AWS::CloudFormation::Stack
     DeletionPolicy: Delete
     UpdateReplacePolicy: Delete
     Properties:
       TemplateURL:
-        Fn::Sub: "${TemplatesBucketUrl}/templates/network.yaml"
+        Fn::Sub: "${TemplatesBucketUrl}/templates/vpc.yaml"
       Parameters:
         ProjectName:
           Ref: ProjectName
@@ -71,25 +71,76 @@ Resources:
         AvailabilityZone:
           Ref: AvailabilityZone
 
+  NatGatewayStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: VpcStack
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      TemplateURL:
+        Fn::Sub: "${TemplatesBucketUrl}/templates/nat_gateway.yaml"
+      Parameters:
+        ProjectName:
+          Ref: ProjectName
+        PublicSubnetID:
+          Fn::GetAtt:
+            - VpcStack
+            - Outputs.PublicSubnetID
+
+  RouteTableStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: NatGatewayStack
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      TemplateURL:
+        Fn::Sub: "${TemplatesBucketUrl}/templates/route_table.yaml"
+      Parameters:
+        ProjectName:
+          Ref: ProjectName
+        VpcID:
+          Fn::GetAtt:
+            - VpcStack
+            - Outputs.VpcID
+        PublicSubnetID:
+          Fn::GetAtt:
+            - VpcStack
+            - Outputs.PublicSubnetID
+        PrivateSubnetID:
+          Fn::GetAtt:
+            - VpcStack
+            - Outputs.PrivateSubnetID
+        InternetGatewayID:
+          Fn::GetAtt:
+            - VpcStack
+            - Outputs.InternetGatewayID
+        NatGatewayID:
+          Fn::GetAtt:
+            - NatGatewayStack
+            - Outputs.NatGatewayID
+
   SecurityGroupStack:
     Type: AWS::CloudFormation::Stack
     DeletionPolicy: Delete
     UpdateReplacePolicy: Delete
     Properties:
       TemplateURL:
-        Fn::Sub: "${TemplatesBucketUrl}/templates/security-group.yaml"
+        Fn::Sub: "${TemplatesBucketUrl}/templates/security_group.yaml"
       Parameters:
         ProjectName:
           Ref: ProjectName
-        VpcId:
+        VpcID:
           Fn::GetAtt:
-            - NetworkStack
-            - Outputs.VpcId
+            - VpcStack
+            - Outputs.VpcID
         MyIp:
           Ref: MyIp
 
   EC2Stack:
     Type: AWS::CloudFormation::Stack
+    DependsOn: 
+      - RouteTableStack
+      - SecurityGroupStack
     DeletionPolicy: Delete
     UpdateReplacePolicy: Delete
     Properties:
@@ -104,45 +155,44 @@ Resources:
           Ref: InstanceType
         KeyName:
           Ref: KeyName
-
-        PublicSubnetId:
+        PublicSubnetID:
           Fn::GetAtt:
-            - NetworkStack
-            - Outputs.PublicSubnetId
-        PrivateSubnetId:
+            - VpcStack
+            - Outputs.PublicSubnetID
+        PrivateSubnetID:
           Fn::GetAtt:
-            - NetworkStack
-            - Outputs.PrivateSubnetId
-        PublicSGId:
-          Fn::GetAtt:
-            - SecurityGroupStack
-            - Outputs.PublicSGId
-        PrivateSGId:
+            - VpcStack
+            - Outputs.PrivateSubnetID
+        PublicSGID:
           Fn::GetAtt:
             - SecurityGroupStack
-            - Outputs.PrivateSGId
+            - Outputs.PublicSGID
+        PrivateSGID:
+          Fn::GetAtt:
+            - SecurityGroupStack
+            - Outputs.PrivateSGID
 
 Outputs:
   VpcId:
     Description: VPC ID
     Value:
       Fn::GetAtt:
-        - NetworkStack
-        - Outputs.VpcId
+        - VpcStack 
+        - Outputs.VpcID 
 
   PublicSubnet:
     Description: Public Subnet ID
     Value:
       Fn::GetAtt:
-        - NetworkStack
-        - Outputs.PublicSubnetId
+        - VpcStack 
+        - Outputs.PublicSubnetID 
 
   PrivateSubnet:
     Description: Private Subnet ID
     Value:
       Fn::GetAtt:
-        - NetworkStack
-        - Outputs.PrivateSubnetId
+        - VpcStack 
+        - Outputs.PrivateSubnetID 
 
   PublicEC2IP:
     Description: IP Public de SSH

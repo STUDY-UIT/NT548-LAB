@@ -3,7 +3,7 @@ Description: NAT Gateway
 
 Parameters:
 
-  PublicSubnet:
+  PublicSubnetID:
     Type: String
     
   ProjectName:
@@ -33,7 +33,7 @@ Resources:
           - NatEip
           - AllocationId
       SubnetId:
-        Ref: PublicSubnet
+        Ref: PublicSubnetID
       Tags:
         - Key: Name
           Value:
@@ -41,7 +41,7 @@ Resources:
 
 Outputs:
 
-  NatGatewayId:
+  NatGatewayID:
     Description: NAT Gateway ID
     Value:
       Ref: NatGateway

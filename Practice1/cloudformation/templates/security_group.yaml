@@ -6,7 +6,7 @@ Parameters:
   ProjectName:
     Type: String
 
-  VpcId:
+  VpcID:
     Type: AWS::EC2::VPC::Id
 
   MyIp:
@@ -24,7 +24,7 @@ Resources:
       #   Fn::Sub: "${ProjectName}-public-sg"
       GroupDescription: Allow SSH only from admin IP
       VpcId:
-        Ref: VpcId
+        Ref: VpcID
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 22
@@ -50,7 +50,7 @@ Resources:
       #   Fn::Sub: "${ProjectName}-private-sg"
       GroupDescription: Allow SSH only from Public EC2 Security Group
       VpcId:
-        Ref: VpcId
+        Ref: VpcID
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 22
@@ -68,12 +68,12 @@ Resources:
 
 Outputs:
 
-  PublicSGId:
+  PublicSGID:
     Description: Public Security Group ID
     Value:
       Ref: PublicEC2SG
 
-  PrivateSGId:
+  PrivateSGID:
     Description: Private Security Group ID
     Value:
       Ref: PrivateEC2SG

@@ -12,7 +12,7 @@ Parameters:
 
   InstanceType:
     Type: String
-    Default: t2.micro
+    Default: t3.micro
     AllowedValues:
       - t2.micro
       - t2.small
@@ -22,16 +22,16 @@ Parameters:
     Type: AWS::EC2::KeyPair::KeyName
     Description: Name of existing EC2 Key Pair
 
-  PublicSubnetId:
+  PublicSubnetID:
     Type: AWS::EC2::Subnet::Id
 
-  PrivateSubnetId:
+  PrivateSubnetID:
     Type: AWS::EC2::Subnet::Id
 
-  PublicSGId:
+  PublicSGID:
     Type: AWS::EC2::SecurityGroup::Id
 
-  PrivateSGId:
+  PrivateSGID:
     Type: AWS::EC2::SecurityGroup::Id
 
 Resources:
@@ -48,9 +48,9 @@ Resources:
       KeyName:
         Ref: KeyName
       SubnetId:
-        Ref: PublicSubnetId
+        Ref: PublicSubnetID
       SecurityGroupIds:
-        - Ref: PublicSGId
+        - Ref: PublicSGID
       Tags:
         - Key: Name
           Value:
@@ -69,9 +69,9 @@ Resources:
       KeyName:
         Ref: KeyName
       SubnetId:
-        Ref: PrivateSubnetId
+        Ref: PrivateSubnetID
       SecurityGroupIds:
-        - Ref: PrivateSGId
+        - Ref: PrivateSGID
       Tags:
         - Key: Name
           Value:

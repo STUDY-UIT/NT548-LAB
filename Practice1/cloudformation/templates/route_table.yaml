@@ -6,7 +6,7 @@ Parameters:
   ProjectName:
     Type: String
 
-  VpcId:
+  VpcID:
     Type: AWS::EC2::VPC::Id
 
   PublicSubnetID:
@@ -15,10 +15,10 @@ Parameters:
   PrivateSubnetID:
     Type: AWS::EC2::Subnet::Id
 
-  IGW:
+  InternetGatewayID:
     Type: String
 
-  NATGW:
+  NatGatewayID:
     Type: String
     
 Resources: 
@@ -29,7 +29,7 @@ Resources:
     UpdateReplacePolicy: Delete
     Properties:
       VpcId:
-        Ref: VpcId
+        Ref: VpcID
       Tags:
         - Key: Name
           Value:
@@ -44,7 +44,7 @@ Resources:
         Ref: PublicRouteTable
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: 
-        Ref: IGW
+        Ref: InternetGatewayID
 
   PublicSubnetRTAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
@@ -63,7 +63,7 @@ Resources:
     UpdateReplacePolicy: Delete
     Properties:
       VpcId: 
-        Ref: VpcId
+        Ref: VpcID
       Tags:
         - Key: Name
           Value:
@@ -78,7 +78,7 @@ Resources:
         Ref: PrivateRouteTable
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: 
-        Ref: NATGW
+        Ref: NatGatewayID
 
   PrivateSubnetAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
@@ -92,12 +92,12 @@ Resources:
 
 Outputs:
 
-  PublicRouteTableId:
+  PublicRouteTableID:
     Description: Public Route Table ID
     Value: 
       Ref: PublicRouteTable
 
-  PrivateRouteTableId:
+  PrivateRouteTableID:
     Description: Private Route Table ID
     Value:
       Ref: PrivateRouteTable

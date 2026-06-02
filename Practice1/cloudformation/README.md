@@ -73,10 +73,18 @@ aws cloudformation create-stack `
 --stack-name nt548-lab `
 --template-body file://main.yaml `
 --parameters `
-ParameterKey=MyIp,ParameterValue=113.161.25.100 `
-ParameterKey=KeyName,ParameterValue=mykey `
+ParameterKey=MyIp,ParameterValue=203.167.11.135 `
+ParameterKey=KeyName,ParameterValue=NT548-LAB-KEYPAIR `
 ParameterKey=TemplatesBucketUrl,ParameterValue=https://nt548-cf-template-bucket.s3.ap-southeast-1.amazonaws.com
 ```
+
+aws cloudformation update-stack `
+--stack-name nt548-lab `
+--template-body file://main.yaml `
+--parameters `
+ParameterKey=MyIp,ParameterValue=203.167.11.135 `
+ParameterKey=KeyName,ParameterValue=NT548-LAB-KEYPAIR `
+ParameterKey=TemplatesBucketUrl,ParameterValue=https://nt548-cf-template-bucket.s3.ap-southeast-1.amazonaws.com
 
 ### Bước 6: Theo dõi tiến trình
 

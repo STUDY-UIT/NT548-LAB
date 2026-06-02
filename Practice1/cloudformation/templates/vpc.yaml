@@ -104,28 +104,28 @@ Resources:
         Ref: AvailabilityZone
       MapPublicIpOnLaunch: false
       Tags:
-        - Key: name
+        - Key: Name
           Value:
             Fn::Sub: "${ProjectName}-private-subnet"
 
 Outputs:
 
-  VpcId: 
+  VpcID: 
     Description: VPC ID
     Value: 
       Ref: VPC
 
-  InternetGatewayId:
+  InternetGatewayID:
     Description: Internet Gateway ID
     Value:
       Ref: InternetGateway
 
-  PublicSubnetId:
+  PublicSubnetID:
     Description: Public Subnet ID
     Value: 
       Ref: PublicSubnet
       
-  PrivateSubnetId:
+  PrivateSubnetID:
     Description: Private Subnet ID
     Value:
       Ref: PrivateSubnet
