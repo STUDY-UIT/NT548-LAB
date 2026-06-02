@@ -55,3 +55,11 @@ variable "key_name" { // chưa biết có dùng key pair để SSH hay không?
   description = "Name of existing EC2 Key Pair for SSH access"
   type        = string
 }
+
+variable "aws_access_key" {
+  type = string
+}
+
+variable "aws_secret_key" {
+  type = string
+}

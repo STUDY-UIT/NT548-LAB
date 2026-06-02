@@ -10,3 +10,5 @@ my_ip               = "YOUR_PUBLIC_IP"    # Lấy tại https://checkip.amazonaw
 ami_id              = "ami-0df7a207adb9748c7"
 instance_type       = "t2.micro"
 key_name            = "YOUR_KEY_PAIR_NAME" # Tên của file .pem gửi trong group 
+aws_access_key = ""
+aws_secret_key = ""

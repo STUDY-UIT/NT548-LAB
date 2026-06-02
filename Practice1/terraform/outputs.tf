@@ -1,6 +1,6 @@
 output "vpc_id" {
   description = "VPC ID"
-  value       = module.network.vpc_id
+  value       = module.vpc.vpc_id
 }
 
 output "public_ec2_ip" {
@@ -15,5 +15,5 @@ output "private_ec2_ip" {
 
 output "nat_gateway_id" {
   description = "NAT Gateway ID"
-  value       = module.network.nat_gateway_id
+  value       = module.nat_gateway.nat_gateway_id
 }

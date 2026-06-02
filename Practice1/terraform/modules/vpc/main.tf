@@ -60,3 +60,4 @@ resource "aws_subnet" "private" {
     Name = "${var.project_name}-private-subnet"
   }
 }
+
