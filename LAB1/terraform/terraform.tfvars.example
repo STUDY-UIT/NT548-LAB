@@ -1,4 +1,3 @@
-# terraform.tfvars.example  ← file này LÊN GitHub
 # Hướng dẫn: Copy file này thành terraform.tfvars rồi điền giá trị thật
 aws_region          = "ap-southeast-1"
 project_name        = "nt548-lab01"

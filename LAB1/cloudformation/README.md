@@ -1,15 +1,54 @@
-```bash
+# LAB 1 - AWS CloudFormation
+
+## Giới thiệu
+
+Thư mục này chứa các CloudFormation Template triển khai tự động hạ tầng AWS.
+
+Kiến trúc được chia thành nhiều template nhỏ nhằm tăng tính tái sử dụng và dễ bảo trì.
+
+---
+
+## Cấu trúc thư mục
+
+```text
 cloudformation/
 │
-├── templates/
-│   ├── vpc.yaml
-│   ├── nat_gateway.yaml
-│   ├── route_table.yaml
-│   ├── security-group.yaml
-│   └── ec2.yaml
+├── main.yaml
 │
-└── main.yaml
+└── templates/
+    ├── vpc.yaml
+    ├── nat_gateway.yaml
+    ├── route_table.yaml
+    ├── security-group.yaml
+    └── ec2.yaml
 ```
+
+---
+
+## Kiến trúc triển khai
+
+```text
+Internet
+    │
+    ▼
+Internet Gateway
+    │
+    ▼
+Public Subnet
+    │
+    ├── Bastion Host
+    │
+    ▼
+NAT Gateway
+    │
+    ▼
+Private Subnet
+    │
+    └── Private EC2
+```
+
+---
+## Các bước thực hiện
 
 ### Bước 1: Tạo S3 bucket
 
@@ -78,6 +117,9 @@ ParameterKey=KeyName,ParameterValue=NT548-LAB-KEYPAIR `
 ParameterKey=TemplatesBucketUrl,ParameterValue=https://nt548-cf-template-bucket.s3.ap-southeast-1.amazonaws.com
 ```
 
+@@note: cần thay đổi ParameterValue cho đúng với máy 
+
+```bash
 aws cloudformation update-stack `
 --stack-name nt548-lab `
 --template-body file://main.yaml `
@@ -85,7 +127,7 @@ aws cloudformation update-stack `
 ParameterKey=MyIp,ParameterValue=203.167.11.135 `
 ParameterKey=KeyName,ParameterValue=NT548-LAB-KEYPAIR `
 ParameterKey=TemplatesBucketUrl,ParameterValue=https://nt548-cf-template-bucket.s3.ap-southeast-1.amazonaws.com
-
+```
 ### Bước 6: Theo dõi tiến trình
 
 ```bash
@@ -140,3 +182,28 @@ ssh -i mykey.pem ec2-user@10.0.2.xxx
 Nếu SSH thành công:
 |Public EC2 → Private EC2|
 
+---
+
+## Xóa hạ tầng
+
+Sau khi hoàn thành bài thực hành:
+
+```bash
+aws cloudformation delete-stack --stack-name nt548-lab
+```
+
+---
+
+# Kiểm tra Stack đã bị xóa
+
+```bash
+aws cloudformation describe-stacks --stack-name nt548-lab
+```
+
+Nếu nhận được:
+
+```text
+Stack with id nt548-lab does not exist
+```
+
+nghĩa là toàn bộ hạ tầng đã được xóa thành công.
