@@ -42,6 +42,22 @@ jobs:
         working-directory: ${{ env.APP_DIR }}/backend_Product
         run: mvn -q -DskipTests package
 
+      - name: Wait for SonarQube server
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: |
+          for attempt in {1..30}; do
+            status="$(curl -fsS "$SONAR_HOST_URL/api/system/status" | sed -n 's/.*"status":"\([^"]*\)".*/\1/p' || true)"
+            if [ "$status" = "UP" ]; then
+              echo "SonarQube is UP"
+              exit 0
+            fi
+            echo "Waiting for SonarQube to be UP, current status: ${status:-unreachable} ($attempt/30)"
+            sleep 10
+          done
+          echo "SonarQube did not become reachable and UP in time"
+          exit 1
+
       - name: Run SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         with:
