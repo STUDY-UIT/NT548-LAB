@@ -2,7 +2,7 @@ backendOrder:
   enabled: true
   replicaCount: 1
   image:
-    repository: 041659741748.dkr.ecr.ap-southeast-1.amazonaws.com/ecommerce/backend-order
+    repository: 113008551898.dkr.ecr.ap-southeast-1.amazonaws.com/ecommerce/backend-order
     tag: latest
     pullPolicy: IfNotPresent
   containerPort: 3003
@@ -17,7 +17,7 @@ backendProduct:
   enabled: true
   replicaCount: 1
   image:
-    repository: 041659741748.dkr.ecr.ap-southeast-1.amazonaws.com/ecommerce/backend-product
+    repository: 113008551898.dkr.ecr.ap-southeast-1.amazonaws.com/ecommerce/backend-product
     tag: latest
     pullPolicy: IfNotPresent
   containerPort: 3002
@@ -34,7 +34,7 @@ backendUser:
   enabled: true
   replicaCount: 1
   image:
-    repository: 041659741748.dkr.ecr.ap-southeast-1.amazonaws.com/ecommerce/backend-user
+    repository: 113008551898.dkr.ecr.ap-southeast-1.amazonaws.com/ecommerce/backend-user
     tag: latest
     pullPolicy: IfNotPresent
   containerPort: 3001
@@ -56,7 +56,7 @@ gateway:
   enabled: true
   replicaCount: 1
   image:
-    repository: 041659741748.dkr.ecr.ap-southeast-1.amazonaws.com/ecommerce/gateway
+    repository: 113008551898.dkr.ecr.ap-southeast-1.amazonaws.com/ecommerce/gateway
     tag: latest
     pullPolicy: IfNotPresent
   containerPort: 3000
@@ -78,7 +78,7 @@ frontend:
   enabled: true
   replicaCount: 1
   image:
-    repository: 041659741748.dkr.ecr.ap-southeast-1.amazonaws.com/ecommerce/frontend
+    repository: 113008551898.dkr.ecr.ap-southeast-1.amazonaws.com/ecommerce/frontend
     tag: latest
     pullPolicy: IfNotPresent
   containerPort: 80

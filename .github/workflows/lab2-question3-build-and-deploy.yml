@@ -10,7 +10,7 @@ on:
 env:
   APP_DIR: LAB2/Question3/microservices-cicd
   AWS_REGION: ap-southeast-1
-  ECR_REGISTRY: 041659741748.dkr.ecr.ap-southeast-1.amazonaws.com
+  ECR_REGISTRY: 113008551898.dkr.ecr.ap-southeast-1.amazonaws.com
   EKS_CLUSTER_NAME: iac-dev-eks
   NAMESPACE: ecommerce
 
