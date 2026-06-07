@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-order-deployment
+  labels:
+    app: order
+spec:
+  replicas: {{ .Values.backendOrder.replicaCount }}
+  selector:
+    matchLabels:
+      app: order
+  template:
+    metadata:
+      labels:
+        app: order
+    spec:
+      containers:
+      - name: order
+        image: {{ .Values.backendOrder.image.repository }}:{{ .Values.backendOrder.image.tag }}
+        imagePullPolicy: {{ .Values.backendOrder.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.backendOrder.containerPort }}
+        resources:
+          {{ toYaml .Values.backendOrder.resources | nindent 12 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+spec:
+  type: {{ .Values.backendOrder.service.type }}
+  selector:
+    app: order
+  ports:
+    - name: http
+      port: {{ .Values.backendOrder.service.port }}
+      targetPort: {{ .Values.backendOrder.service.targetPort }}
+

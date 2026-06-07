@@ -1,0 +1,4 @@
+flask
+pymongo
+dnspython
+prometheus-client==0.25.0

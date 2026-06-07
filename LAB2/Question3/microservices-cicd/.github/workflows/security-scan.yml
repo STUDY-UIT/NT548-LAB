@@ -1,0 +1,76 @@
+name: Security Scan
+
+on:
+  push:
+    branches:
+      - master
+      - feat/helm
+  pull_request:
+    branches:
+      - master
+  schedule:
+    - cron: '0 2 * * *'
+permissions:
+  contents: read
+  security-events: write
+jobs:
+
+  trivy-scan:
+    name: Trivy Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Backend User Image
+        run: docker build -t backend-user:${{ github.sha }} ./backend_User
+
+      - name: Build Backend Product Image
+        run: docker build -t backend-product:${{ github.sha }} ./backend_Product
+
+      - name: Build Backend Order Image
+        run: docker build -t backend-order:${{ github.sha }} ./backend_Order
+
+      - name: Build Frontend Image
+        run: docker build -t frontend:${{ github.sha }} ./frontend
+
+      - name: Build Gateway Image
+        run: docker build -t gateway:${{ github.sha }} ./gateway
+
+      - name: Run Trivy Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'image'
+          image-ref: 'backend-user:${{ github.sha }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy Results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+
+  dependency-check:
+    name: Dependency Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          path: '.'
+          format: 'SARIF'
+          project: 'E-commerceApplication'
+          out: 'reports'
+          args: >
+            --enableExperimental
+
+      - name: Upload Dependency Check Results
+        uses: github/codeql-action/upload-sarif@v3 
+        with:
+          sarif_file: 'reports/dependency-check-report.sarif'

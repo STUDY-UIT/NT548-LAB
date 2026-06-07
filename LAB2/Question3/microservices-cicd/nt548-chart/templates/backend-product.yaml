@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-product-deployment
+  labels:
+    app: product
+spec:
+  replicas: {{ .Values.backendProduct.replicaCount }}
+  selector:
+    matchLabels:
+      app: product
+  template:
+    metadata:
+      labels:
+        app: product
+    spec:
+      containers:
+      - name: product
+        image: "{{ .Values.backendProduct.image.repository }}:{{ .Values.backendProduct.image.tag }}"
+        imagePullPolicy: {{ .Values.backendProduct.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.backendProduct.containerPort }}
+        resources:
+          {{ toYaml .Values.backendProduct.resources | nindent 12 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-service
+spec:
+  selector:
+    app: product
+  ports:
+    - name: http
+      port: {{ .Values.backendProduct.service.port }}
+      targetPort: {{ .Values.backendProduct.service.targetPort }}

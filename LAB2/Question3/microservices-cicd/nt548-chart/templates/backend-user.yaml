@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-user-deployment
+  labels:
+    app: user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user 
+  template:
+    metadata:
+      labels:
+        app: user
+    spec:
+      containers:
+      - name: user
+        image: "{{ .Values.backendUser.image.repository }}:{{ .Values.backendUser.image.tag }}"
+        ports:
+        - containerPort: {{ .Values.backendUser.containerPort }}
+        env:
+          {{- range $key, $value := .Values.backendUser.env }}
+          - name: {{ $key }}
+            value: {{ $value | quote }}
+          {{- end }}
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.backendUser.kubernetesSecretName }}
+                key: DB_PASSWORD
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: user-service
+spec:
+  type: {{ .Values.backendUser.service.type }}
+  selector:
+    app: user
+  ports:
+    - name: http
+      port: {{ .Values.backendUser.service.port }}
+      targetPort: {{ .Values.backendUser.service.targetPort }}
