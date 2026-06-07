@@ -33,7 +33,9 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v2
+        run: |
+          aws ecr get-login-password --region "${{ env.AWS_REGION }}" | \
+            docker login --username AWS --password-stdin "${{ env.ECR_REGISTRY }}"
 
       - name: Ensure ECR repositories exist
         run: |
