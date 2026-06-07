@@ -1,0 +1,61 @@
+name: Lab2 Question3 - SonarQube Code Quality
+
+on:
+  push:
+    branches:
+      - master
+      - main
+      - develop
+  pull_request:
+    branches:
+      - master
+      - main
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+env:
+  APP_DIR: LAB2/Question3/microservices-cicd
+
+jobs:
+  sonarqube-scan:
+    name: Analyze Microservices with SonarQube
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: temurin
+          cache: maven
+
+      - name: Compile Product Service
+        working-directory: ${{ env.APP_DIR }}/backend_Product
+        run: mvn -q -DskipTests package
+
+      - name: Run SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        with:
+          args: >
+            -Dsonar.projectBaseDir=${{ env.APP_DIR }}
+            -Dsonar.qualitygate.wait=true
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: Upload SonarQube Scanner Metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonarqube-scanner-metadata
+          path: ${{ env.APP_DIR }}/.scannerwork/report-task.txt
+          if-no-files-found: ignore

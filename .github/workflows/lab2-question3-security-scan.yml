@@ -1,0 +1,84 @@
+name: Lab2 Question3 - Security Scan
+
+on:
+  push:
+    branches:
+      - master
+      - main
+      - develop
+  pull_request:
+    branches:
+      - master
+      - main
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+env:
+  APP_DIR: LAB2/Question3/microservices-cicd
+
+jobs:
+  trivy-scan:
+    name: Trivy Security Scan
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - name: backend-user
+            context: backend_User
+          - name: backend-product
+            context: backend_Product
+          - name: backend-order
+            context: backend_Order
+          - name: frontend
+            context: frontend
+          - name: gateway
+            context: gateway
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build ${{ matrix.image.name }} image
+        run: docker build -t ${{ matrix.image.name }}:${{ github.sha }} ${{ env.APP_DIR }}/${{ matrix.image.context }}
+
+      - name: Run Trivy Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: image
+          image-ref: ${{ matrix.image.name }}:${{ github.sha }}
+          format: sarif
+          output: trivy-${{ matrix.image.name }}.sarif
+
+      - name: Upload Trivy Results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-${{ matrix.image.name }}.sarif
+
+  dependency-check:
+    name: Dependency Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          path: ${{ env.APP_DIR }}
+          format: SARIF
+          project: E-commerceApplication
+          out: reports
+          args: >
+            --enableExperimental
+
+      - name: Upload Dependency Check Results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: reports/dependency-check-report.sarif
