@@ -26,7 +26,6 @@ Parameters:
   MyIp:
     Type: String
     Description: Your public IP address (without /32) https://whatsmyip.com/
-    Default: 0.0.0.0/0
 
   AmiId:
     Type: AWS::EC2::Image::Id
