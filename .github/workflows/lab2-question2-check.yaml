@@ -1,4 +1,4 @@
-name: Terraform Check
+name: Lab2 Question2 - Terraform Check
 
 on:
   push:

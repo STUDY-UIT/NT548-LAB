@@ -1,4 +1,4 @@
-name: Terraform Apply Or Destroy
+name: Lab2 Question2 - Terraform Apply Or Destroy
 
 on:
   workflow_dispatch:
