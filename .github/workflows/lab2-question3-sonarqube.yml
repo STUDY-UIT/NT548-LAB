@@ -1,16 +1,16 @@
 name: Lab2 Question3 - SonarQube Code Quality
 
 on:
-  push:
-    branches:
-      - master
-      - main
-      - develop
-  pull_request:
-    branches:
-      - master
-      - main
-      - develop
+  # push:
+  #   branches:
+  #     - master
+  #     - main
+  #     - develop
+  # pull_request:
+  #   branches:
+  #     - master
+  #     - main
+  #     - develop
   workflow_dispatch:
 
 permissions:
