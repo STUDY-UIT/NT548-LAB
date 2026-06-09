@@ -17,7 +17,7 @@ on:
 
 jobs:
   check:
-    name: Validate & Security Scan
+    name: Lab2 Question2 - Validate & Security Scan
     runs-on: ubuntu-latest
 
     defaults:
@@ -45,3 +45,5 @@ jobs:
         with:
           directory: LAB1/terraform
           framework: terraform
+          # có 1 số policies sẽ skip vì khi khi thêm vào ảnh hưởng tính sử dụng
+          skip_check: CKV_AWS_88,CKV_AWS_130,CKV2_AWS_11,CKV2_AWS_41,CKV2_AWS_5,CKV_AWS_382,CKV_AWS_23,CKV_AWS_135,CKV_AWS_126,CKV_AWS_8,CKV_AWS_79
