@@ -37,6 +37,7 @@ variable "az" {
 variable "my_ip" {
   description = "Your Public IP address for SSH access (without /32)"
   type        = string
+  default     = "0.0.0.0/24"
 }
 
 variable "ami_id" {
@@ -54,6 +55,7 @@ variable "instance_type" {
 variable "key_name" { // chưa biết có dùng key pair để SSH hay không?
   description = "Name of existing EC2 Key Pair for SSH access"
   type        = string
+  default     = "NT548-LAB-KEYPAIR"
 }
 
 variable "aws_access_key" {

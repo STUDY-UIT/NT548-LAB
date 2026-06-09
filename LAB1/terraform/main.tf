@@ -22,7 +22,7 @@ module "route_table" {
   aws_igw_id     = module.vpc.aws_igw_id
   nat_gateway_id = module.nat_gateway.nat_gateway_id
 
-  vpc_id       = module.vpc.vpc_id
+  vpc_id            = module.vpc.vpc_id
   public_subnet_id  = module.vpc.public_subnet_id
   private_subnet_id = module.vpc.private_subnet_id
 }
